@@ -75,6 +75,11 @@ export type FormattedCustomersTable = {
   total_paid: string;
 };
 
+export type CustomerField = {
+  id: string;
+  name: string;
+};
+
 export type PatientField = {
   id: string;
   name: string;
