@@ -3,8 +3,8 @@
 const users = [
   {
     id: '410544b2-4001-4271-9855-fec4b6a6442a',
-    name: 'User',
-    email: 'user@nextmail.com',
+    name: 'Civ',
+    email: 'civ@medivault.com',
     password: '123456',
   },
 ];
@@ -180,9 +180,34 @@ const revenue = [
   { month: 'Dec', revenue: 4800 },
 ];
 
+const patients = [
+  {
+    id: '3958dc9e-712f-4377-85e9-fec4b6a6442a',
+    name: 'Delba de Oliveira',
+    height: '170',
+    weight: '60',
+    birthdate: '1995-05-25',
+  },
+  {
+    id: '50ca3e18-62cd-11ee-8c99-0242ac120002',
+    name: 'Steven Tey',
+    height: '178',
+    weight: '78',
+    birthdate: '1998-03-06',
+  },
+  {
+    id: '3958dc9e-787f-4377-85e9-fec4b6a6442a',
+    name: 'Steph Dietz',
+    height: '183',
+    weight: '95',
+    birthdate: '1991-11-30',
+  },
+];
+
 module.exports = {
   users,
   customers,
+  patients,
   invoices,
   revenue,
 };
