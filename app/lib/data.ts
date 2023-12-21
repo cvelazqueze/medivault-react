@@ -7,6 +7,8 @@ import {
   LatestInvoiceRaw,
   User,
   Revenue,
+  CustomerField,
+  PatientsTable,
 } from './definitions';
 import { formatCurrency } from './utils';
 import { unstable_noStore  as noStore} from 'next/cache';
@@ -151,6 +153,56 @@ export async function fetchInvoicesPages(query: string) {
   }
 }
 
+export async function fetchPatientsPages(query: string) {
+  noStore();
+  try {
+    const count = await sql`SELECT COUNT(*)
+    FROM patients
+    WHERE
+      name ILIKE ${`%${query}%`}
+  `;
+
+    const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of patients.');
+  }
+}
+
+export async function fetchFilteredPatients(
+  
+  query: string,
+  currentPage: number,
+) {
+  noStore();
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+
+  try {
+    const patients = await sql<PatientsTable>`
+      SELECT
+        id,
+        name,
+        height,
+        weight,
+        birthdate
+      FROM patients
+      WHERE
+        name ILIKE ${`%${query}%`} OR
+        height ILIKE ${`%${query}%`} OR
+        weight ILIKE ${`%${query}%`} OR
+        birthdate::text ILIKE ${`%${query}%`}
+      ORDER BY name DESC
+      LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
+    `;
+
+    return patients.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch patients`.');
+  }
+}
+
 export async function fetchInvoiceById(id: string) {
   try {
     const data = await sql<InvoiceForm>`
@@ -195,6 +247,25 @@ export async function fetchPatients() {
   } catch (err) {
     console.error('Database Error:', err);
     throw new Error('Failed to fetch all patients.');
+  }
+}
+
+export async function fetchCustomers() {
+  noStore();
+  try {
+    const data = await sql<CustomerField>`
+      SELECT
+        id,
+        name
+      FROM customers
+      ORDER BY name ASC
+    `;
+
+    const customers = data.rows;
+    return customers;
+  } catch (err) {
+    console.error('Database Error:', err);
+    throw new Error('Failed to fetch all customers.');
   }
 }
 
