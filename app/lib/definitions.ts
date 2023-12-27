@@ -109,3 +109,11 @@ export type InvoiceForm = {
   amount: number;
   status: 'pending' | 'paid';
 };
+
+export type PatientForm = {
+  id: string;
+  name: string;
+  height: string;
+  weight: string;
+  birthdate: string;
+};

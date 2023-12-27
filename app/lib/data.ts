@@ -9,6 +9,7 @@ import {
   Revenue,
   CustomerField,
   PatientsTable,
+  PatientForm,
 } from './definitions';
 import { formatCurrency } from './utils';
 import { unstable_noStore  as noStore} from 'next/cache';
@@ -93,7 +94,7 @@ export async function fetchCardData() {
   }
 }
 
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 10;
 export async function fetchFilteredInvoices(
   
   query: string,
@@ -225,6 +226,28 @@ export async function fetchInvoiceById(id: string) {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch invoice.');
+  }
+}
+
+export async function fetchPatientById(id: string) {
+  try {
+    const data = await sql<PatientForm>`
+    SELECT
+    patients.id,
+    patients.name,
+    patients.height,
+    patients.weight,
+    patients.birthdate
+    FROM patients
+    WHERE patients.id = ${id};
+    `;
+    
+    const patient = data.rows;
+
+    return patient[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error(`Failed to fetch patient with ${id}.`);
   }
 }
 
